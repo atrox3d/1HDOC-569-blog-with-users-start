@@ -1,6 +1,10 @@
 ########################################################################################################################
 # https://www.udemy.com/course/100-days-of-code/learn/lecture/22867475#questions
 ########################################################################################################################
+#
+#   Flask imports
+#
+########################################################################################################################
 # import flask_sqlalchemy
 from flask import (
     Flask,
@@ -11,15 +15,30 @@ from flask import (
 )
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from datetime import date
-from flask_login import current_user
+from flask_login import (
+    current_user,
+    LoginManager,
+    login_required,
+    login_user,
+    logout_user
+)
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
 )
-
-from app.forms import CreatePostForm
 ########################################################################################################################
+#
+#   standard imports
+#
+########################################################################################################################
+from datetime import date
+import logging
+########################################################################################################################
+#
+#   project imports
+#
+########################################################################################################################
+from app.forms import CreatePostForm
 #
 # https://stackoverflow.com/questions/51756650/using-proper-file-structure-with-sqlalchemy-and-how-to-add-data-to-db
 # https://github.com/slezica/bleg/blob/master/data/posts/2014-03-08-avoiding-circular-dependencies-in-flask.md
@@ -29,10 +48,9 @@ from app.models import (
     User,
     BlogPost
 )
-########################################################################################################################
 import util.network
 import util.logging
-import logging
+########################################################################################################################
 
 util.logging.get_root_logger()
 logger = logging.getLogger(__name__)
@@ -41,6 +59,7 @@ logger = logging.getLogger(__name__)
 #
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+
 ckeditor = CKEditor(app)
 Bootstrap(app)
 #
@@ -68,6 +87,13 @@ db.init_app(app)
 db.create_all()
 
 
+loginmanager = LoginManager(app)
+@loginmanager.user_loader
+def load_user(user_id):
+    user = User.query.get(user_id)
+    return user
+
+
 ########################################################################################################################
 #
 #
@@ -85,8 +111,8 @@ def get_all_posts():
 @app.route('/register', methods=['GET', 'POST'])
 @util.logging.log_decorator()
 def register():
-    from app.forms import Registerform
-    form = Registerform()
+    from app.forms import RegisterForm
+    form = RegisterForm()
     if form.validate_on_submit():
         logger.info("hash password")
         email = form.email.data
@@ -103,17 +129,34 @@ def register():
             logger.info("add user")
             db.session.add(user)
             db.session.commit()
-            logger.info("redirect")
-            return redirect(url_for('get_all_posts'))
+            url = url_for("get_all_posts")
+            logger.info(f"redirect: {url=}")
+            return redirect(url)
         except Exception as e:
             logger.exception(e)
     return render_template("register.html", form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 @util.logging.log_decorator()
 def login():
-    return render_template("login.html")
+    from app.forms import Loginform
+    form = Loginform()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password, password):
+                login_user(user)
+                url = url_for("get_all_posts")
+                logger.info(f"redirect: {url=}")
+                return redirect(url)
+        else:
+            url = url_for("register", loggedin=current_user.is_authenticated)
+            logger.info(f"redirect: {url=}")
+            return redirect(url)
+    return render_template("login.html", form=form)
 
 
 @app.route('/logout')
