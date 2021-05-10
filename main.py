@@ -18,12 +18,9 @@ from flask_ckeditor import CKEditor
 from flask_login import (
     current_user,
     LoginManager,
-    login_required,
-    login_user,
-    logout_user
+    login_user
 )
 from werkzeug.security import (
-    generate_password_hash,
     check_password_hash
 )
 ########################################################################################################################
@@ -108,33 +105,9 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts)
 
 
-@app.route('/register', methods=['GET', 'POST'])
-@util.logging.log_decorator()
-def register():
-    from app.forms import RegisterForm
-    form = RegisterForm()
-    if form.validate_on_submit():
-        logger.info("hash password")
-        email = form.email.data
-        password = form.password.data
-        name = form.name.data
-        password_hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-        logger.info(f"create User({email=}, {password_hash=}, {name=}")
-        user = User(
-            email=email,
-            password=password_hash,
-            name=name
-        )
-        try:
-            logger.info("add user")
-            db.session.add(user)
-            db.session.commit()
-            url = url_for("get_all_posts")
-            logger.info(f"redirect: {url=}")
-            return redirect(url)
-        except Exception as e:
-            logger.exception(e)
-    return render_template("register.html", form=form)
+from app.routes.register import register
+register = app.route('/register', methods=['GET', 'POST'])(register)
+
 
 
 @app.route('/login', methods=["GET", "POST"])
