@@ -61,43 +61,51 @@ db.create_all()
 
 
 @app.route('/')
+@util.logging.log_decorator()
 def get_all_posts():
     posts = BlogPost.query.all()
     return render_template("index.html", all_posts=posts)
 
 
 @app.route('/register')
+@util.logging.log_decorator()
 def register():
     return render_template("register.html")
 
 
 @app.route('/login')
+@util.logging.log_decorator()
 def login():
     return render_template("login.html")
 
 
 @app.route('/logout')
+@util.logging.log_decorator()
 def logout():
     return redirect(url_for('get_all_posts'))
 
 
 @app.route("/post/<int:post_id>")
+@util.logging.log_decorator()
 def show_post(post_id):
     requested_post = BlogPost.query.get(post_id)
     return render_template("post.html", post=requested_post)
 
 
 @app.route("/about")
+@util.logging.log_decorator()
 def about():
     return render_template("about.html")
 
 
 @app.route("/contact")
+@util.logging.log_decorator()
 def contact():
     return render_template("contact.html")
 
 
 @app.route("/new-post")
+@util.logging.log_decorator()
 def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
@@ -116,6 +124,7 @@ def add_new_post():
 
 
 @app.route("/edit-post/<int:post_id>")
+@util.logging.log_decorator()
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
@@ -138,6 +147,7 @@ def edit_post(post_id):
 
 
 @app.route("/delete/<int:post_id>")
+@util.logging.log_decorator()
 def delete_post(post_id):
     post_to_delete = BlogPost.query.get(post_id)
     db.session.delete(post_to_delete)
