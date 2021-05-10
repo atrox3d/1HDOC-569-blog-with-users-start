@@ -17,11 +17,7 @@ from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from flask_login import (
     current_user,
-    LoginManager,
-    login_user
-)
-from werkzeug.security import (
-    check_password_hash
+    LoginManager
 )
 ########################################################################################################################
 #
@@ -108,28 +104,8 @@ def get_all_posts():
 from app.routes.register import register
 register = app.route('/register', methods=['GET', 'POST'])(register)
 
-
-
-@app.route('/login', methods=["GET", "POST"])
-@util.logging.log_decorator()
-def login():
-    from app.forms import Loginform
-    form = Loginform()
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-        user = User.query.filter_by(email=email).first()
-        if user:
-            if check_password_hash(user.password, password):
-                login_user(user)
-                url = url_for("get_all_posts")
-                logger.info(f"redirect: {url=}")
-                return redirect(url)
-        else:
-            url = url_for("register", loggedin=current_user.is_authenticated)
-            logger.info(f"redirect: {url=}")
-            return redirect(url)
-    return render_template("login.html", form=form)
+from app.routes.login import login
+login = app.route('/login', methods=["GET", "POST"])(login)
 
 
 @app.route('/logout')
