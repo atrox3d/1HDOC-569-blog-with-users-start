@@ -2,28 +2,25 @@ from flask import (
     Flask,
     render_template,
     redirect,
-    url_for,
-    flash
+    url_for
 )
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
-from werkzeug.security import (
-    generate_password_hash,
-    check_password_hash
-)
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
 from flask_login import (
-    UserMixin,
-    login_user,
-    LoginManager,
-    login_required,
-    current_user,
-    logout_user
+    current_user
 )
-from forms import CreatePostForm
-from flask_gravatar import Gravatar
+from app.forms import CreatePostForm
+#
+# https://stackoverflow.com/questions/51756650/using-proper-file-structure-with-sqlalchemy-and-how-to-add-data-to-db
+# https://github.com/slezica/bleg/blob/master/data/posts/2014-03-08-avoiding-circular-dependencies-in-flask.md
+#
+from app.models import (
+    db,
+    User,
+    BlogPost
+)
 #
 import util.network
 import util.logging
@@ -41,31 +38,21 @@ Bootstrap(app)
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
-
-
-##CONFIGURE TABLES
-
-class BlogPost(db.Model):
-    __tablename__ = "blog_posts"
-    id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(250), nullable=False)
-    title = db.Column(db.String(250), unique=True, nullable=False)
-    subtitle = db.Column(db.String(250), nullable=False)
-    date = db.Column(db.String(250), nullable=False)
-    body = db.Column(db.Text, nullable=False)
-    img_url = db.Column(db.String(250), nullable=False)
-
+########################################################################################################################
+#
+# https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
+#
+app.app_context().push()
+#
+# https://stackoverflow.com/questions/51756650/using-proper-file-structure-with-sqlalchemy-and-how-to-add-data-to-db
+# https://github.com/slezica/bleg/blob/master/data/posts/2014-03-08-avoiding-circular-dependencies-in-flask.md
+#
+# db = SQLAlchemy(app)
+db.init_app(app)
+########################################################################################################################
 
 ##CREATE TABLE IN DB
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    name = db.Column(db.String(1000))
-    # plainpassword = db.Column(db.String(100))
-
-
+# db.drop_all()
 db.create_all()
 
 
@@ -168,5 +155,6 @@ if __name__ == "__main__":
     app.run(
         # host='0.0.0.0',
         host=util.network.get_ipaddress(),
-        port=5000
+        port=5000,
+        debug=True
     )
