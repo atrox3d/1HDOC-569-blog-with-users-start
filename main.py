@@ -24,6 +24,14 @@ from flask_login import (
 )
 from forms import CreatePostForm
 from flask_gravatar import Gravatar
+#
+import util.network
+import util.logging
+import logging
+
+util.logging.get_root_logger()
+logger = logging.getLogger(__name__)
+#
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -138,4 +146,8 @@ def delete_post(post_id):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(
+        # host='0.0.0.0',
+        host=util.network.get_ipaddress(),
+        port=5000
+    )
