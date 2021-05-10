@@ -1,3 +1,6 @@
+########################################################################################################################
+# https://www.udemy.com/course/100-days-of-code/learn/lecture/22867475#questions
+########################################################################################################################
 from flask import (
     Flask,
     render_template,
@@ -12,6 +15,7 @@ from flask_login import (
     current_user
 )
 from app.forms import CreatePostForm
+########################################################################################################################
 #
 # https://stackoverflow.com/questions/51756650/using-proper-file-structure-with-sqlalchemy-and-how-to-add-data-to-db
 # https://github.com/slezica/bleg/blob/master/data/posts/2014-03-08-avoiding-circular-dependencies-in-flask.md
@@ -21,7 +25,7 @@ from app.models import (
     User,
     BlogPost
 )
-#
+########################################################################################################################
 import util.network
 import util.logging
 import logging
