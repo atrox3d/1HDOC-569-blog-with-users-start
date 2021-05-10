@@ -1,19 +1,23 @@
 ########################################################################################################################
 # https://www.udemy.com/course/100-days-of-code/learn/lecture/22867475#questions
 ########################################################################################################################
+# import flask_sqlalchemy
 from flask import (
     Flask,
     render_template,
     redirect,
-    url_for
+    url_for,
+    # request,
 )
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import (
-    current_user
+from flask_login import current_user
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash
 )
+
 from app.forms import CreatePostForm
 ########################################################################################################################
 #
@@ -33,16 +37,20 @@ import logging
 util.logging.get_root_logger()
 logger = logging.getLogger(__name__)
 #
-
+#   app
+#
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
-
-##CONNECT TO DB
+#
+#   CONNECT TO DB
+#
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 ########################################################################################################################
+#
+#   resolve circular dependencies
 #
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/contexts/
 #
@@ -51,15 +59,22 @@ app.app_context().push()
 # https://stackoverflow.com/questions/51756650/using-proper-file-structure-with-sqlalchemy-and-how-to-add-data-to-db
 # https://github.com/slezica/bleg/blob/master/data/posts/2014-03-08-avoiding-circular-dependencies-in-flask.md
 #
+# from flask_sqlalchemy import SQLAlchemy
 # db = SQLAlchemy(app)
 db.init_app(app)
 ########################################################################################################################
-
-##CREATE TABLE IN DB
+# CREATE TABLE IN DB
 # db.drop_all()
 db.create_all()
 
 
+########################################################################################################################
+#
+#
+#   routes
+#
+#
+########################################################################################################################
 @app.route('/')
 @util.logging.log_decorator()
 def get_all_posts():
@@ -67,10 +82,32 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts)
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 @util.logging.log_decorator()
 def register():
-    return render_template("register.html")
+    from app.forms import Registerform
+    form = Registerform()
+    if form.validate_on_submit():
+        logger.info("hash password")
+        email = form.email.data
+        password = form.password.data
+        name = form.name.data
+        password_hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+        logger.info(f"create User({email=}, {password_hash=}, {name=}")
+        user = User(
+            email=email,
+            password=password_hash,
+            name=name
+        )
+        try:
+            logger.info("add user")
+            db.session.add(user)
+            db.session.commit()
+            logger.info("redirect")
+            return redirect(url_for('get_all_posts'))
+        except Exception as e:
+            logger.exception(e)
+    return render_template("register.html", form=form)
 
 
 @app.route('/login')
