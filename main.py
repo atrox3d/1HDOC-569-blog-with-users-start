@@ -57,6 +57,15 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
+##CREATE TABLE IN DB
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(100))
+    name = db.Column(db.String(1000))
+    # plainpassword = db.Column(db.String(100))
+
+
 db.create_all()
 
 
