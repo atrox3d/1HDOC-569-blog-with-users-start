@@ -7,9 +7,11 @@ import logging
 
 import util.logging
 from app.models import User
+
 # from main import app, logger
 
 logger = logging.getLogger(__name__)
+
 
 @util.logging.log_decorator()
 def login():

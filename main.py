@@ -43,6 +43,7 @@ from app.models import (
 )
 import util.network
 import util.logging
+
 ########################################################################################################################
 
 util.logging.get_root_logger()
@@ -79,8 +80,9 @@ db.init_app(app)
 # db.drop_all()
 db.create_all()
 
-
 loginmanager = LoginManager(app)
+
+
 @loginmanager.user_loader
 def load_user(user_id):
     user = User.query.get(user_id)
@@ -94,12 +96,9 @@ def load_user(user_id):
 #
 #
 ########################################################################################################################
-@app.route('/')
-@util.logging.log_decorator()
-def get_all_posts():
-    posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts)
 
+from app.routes.home import get_all_posts
+get_all_posts = app.route('/')(get_all_posts)
 
 from app.routes.register import register
 register = app.route('/register', methods=['GET', 'POST'])(register)
