@@ -1,4 +1,4 @@
-from flask import url_for, render_template
+from flask import url_for, render_template, flash
 from flask_login import login_user, current_user
 from werkzeug.security import check_password_hash
 from werkzeug.utils import redirect
@@ -42,8 +42,10 @@ def login():
                 return redirect(url)
             else:
                 logger.error("wrong password")
+                flash("wrong password, try again")
         else:
             logger.error("user not found")
+            flash("email not found, please register")
             url = url_for("register")
             logger.info(f"redirect: {url=}")
             return redirect(url)

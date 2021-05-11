@@ -1,4 +1,4 @@
-from flask import url_for, render_template
+from flask import url_for, render_template, flash
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 
@@ -58,5 +58,9 @@ def register():
             return redirect(url)
         except Exception as e:
             logger.error(repr(e))
+            flash("email already in use, login instead")
+            url = url_for("login")
+            logger.info(f"redirect: {url=}")
+            return redirect(url)
     logger.info("GET")
     return render_template("register.html", form=form)
