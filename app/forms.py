@@ -26,8 +26,11 @@ class Loginform(FlaskForm):
         "Password",
         validators=[DataRequired()]
     )
-    submit = SubmitField("Submit")
 
 
 class RegisterForm(Loginform):
     name = StringField("Name", validators=[DataRequired()])
+
+
+Loginform.submit = SubmitField("Submit")
+RegisterForm.submit = SubmitField("Submit")

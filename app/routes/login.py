@@ -5,6 +5,7 @@ from werkzeug.utils import redirect
 
 import logging
 
+import app.forms
 import util.logging
 from app.models import User
 
@@ -14,21 +15,36 @@ logger = logging.getLogger(__name__)
 
 
 @util.logging.log_decorator()
+def processform(form: app.forms.Loginform):
+    email = form.email.data
+    password = form.password.data
+    logger.info(f"{email=}")
+    logger.info(f"{password=}")
+    return email, password
+
+
+@util.logging.log_decorator()
 def login():
     from app.forms import Loginform
     form = Loginform()
     if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
+        logger.info("POST")
+        email,  password = processform(form)
+        logger.info(f"query user {email=}")
         user = User.query.filter_by(email=email).first()
         if user:
+            logger.info("found user, check password")
             if check_password_hash(user.password, password):
+                logger.info("password ok, login user")
                 login_user(user)
                 url = url_for("get_all_posts")
                 logger.info(f"redirect: {url=}")
                 return redirect(url)
+            else:
+                logger.error("wrong password")
         else:
-            url = url_for("register", loggedin=current_user.is_authenticated)
+            logger.error("user not found")
+            url = url_for("register")
             logger.info(f"redirect: {url=}")
             return redirect(url)
     return render_template("login.html", form=form)

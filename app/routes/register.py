@@ -14,15 +14,18 @@ logger = logging.getLogger(__name__)
 # from main import app, logger
 @util.logging.log_decorator()
 def processform(form: app.forms.RegisterForm):
-    logger.info("hash password")
     email = form.email.data
     password = form.password.data
     name = form.name.data
+    logger.info(f"{email=}")
+    logger.info(f"{password=}")
+    logger.info(f"{name=}")
     return email, password, name
 
 
 @util.logging.log_decorator()
 def createuser(email, password, name):
+    logger.info("hash password")
     password_hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
     logger.info(f"create User({email=}, {password_hash=}, {name=}")
     user = User(
@@ -45,6 +48,7 @@ def register():
     from app.forms import RegisterForm
     form = RegisterForm()
     if form.validate_on_submit():
+        logger.info("POST")
         email, password, name = processform(form)
         user = createuser(email, password, name)
         try:
@@ -53,5 +57,6 @@ def register():
             logger.info(f"redirect: {url=}")
             return redirect(url)
         except Exception as e:
-            logger.exception(e)
+            logger.error(repr(e))
+    logger.info("GET")
     return render_template("register.html", form=form)
