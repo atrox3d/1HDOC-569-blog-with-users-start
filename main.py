@@ -109,11 +109,8 @@ login = app.route('/login', methods=["GET", "POST"])(login)
 from app.routes.logout import logout
 logout = app.route('/logout')(logout)
 
-@app.route("/post/<int:post_id>")
-@util.logging.log_decorator()
-def show_post(post_id):
-    requested_post = BlogPost.query.get(post_id)
-    return render_template("post.html", post=requested_post)
+from app.routes.showpost import show_post
+show_post = app.route("/post/<int:post_id>")(show_post)
 
 
 @app.route("/about")
