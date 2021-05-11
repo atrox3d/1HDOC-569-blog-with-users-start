@@ -16,7 +16,6 @@ from flask import (
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from flask_login import (
-    current_user,
     LoginManager
 )
 ########################################################################################################################
@@ -24,7 +23,6 @@ from flask_login import (
 #   standard imports
 #
 ########################################################################################################################
-from datetime import date
 import logging
 ########################################################################################################################
 #
@@ -118,23 +116,8 @@ about = app.route("/about")(about)
 from app.routes.contact import contact
 contact = app.route("/contact")(contact)
 
-@app.route("/new-post")
-@util.logging.log_decorator()
-def add_new_post():
-    form = CreatePostForm()
-    if form.validate_on_submit():
-        new_post = BlogPost(
-            title=form.title.data,
-            subtitle=form.subtitle.data,
-            body=form.body.data,
-            img_url=form.img_url.data,
-            author=current_user,
-            date=date.today().strftime("%B %d, %Y")
-        )
-        db.session.add(new_post)
-        db.session.commit()
-        return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form)
+from app.routes.addpost import add_new_post
+add_new_post = app.route("/new-post")(add_new_post)
 
 
 @app.route("/edit-post/<int:post_id>")
