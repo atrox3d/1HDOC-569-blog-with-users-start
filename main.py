@@ -115,11 +115,8 @@ show_post = app.route("/post/<int:post_id>")(show_post)
 from app.routes.about import about
 about = app.route("/about")(about)
 
-@app.route("/contact")
-@util.logging.log_decorator()
-def contact():
-    return render_template("contact.html")
-
+from app.routes.contact import contact
+contact = app.route("/contact")(contact)
 
 @app.route("/new-post")
 @util.logging.log_decorator()
