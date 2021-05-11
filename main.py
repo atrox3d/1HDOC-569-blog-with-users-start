@@ -5,16 +5,10 @@
 #   Flask imports
 #
 ########################################################################################################################
-# import flask_sqlalchemy
-from flask import (
-    Flask,
-    # request,
-)
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from flask_login import (
-    LoginManager
-)
+from flask_login import LoginManager
 ########################################################################################################################
 #
 #   standard imports
@@ -36,9 +30,7 @@ from app.models import (
 )
 import util.network
 import util.logging
-
 ########################################################################################################################
-
 util.logging.get_root_logger()
 logger = logging.getLogger(__name__)
 #
@@ -46,7 +38,6 @@ logger = logging.getLogger(__name__)
 #
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-
 ckeditor = CKEditor(app)
 Bootstrap(app)
 #
@@ -72,7 +63,11 @@ db.init_app(app)
 # CREATE TABLE IN DB
 # db.drop_all()
 db.create_all()
-
+########################################################################################################################
+#
+#   security
+#
+########################################################################################################################
 loginmanager = LoginManager(app)
 
 
@@ -89,7 +84,6 @@ def load_user(user_id):
 #
 #
 ########################################################################################################################
-
 from app.routes.home import get_all_posts
 get_all_posts = app.route('/')(get_all_posts)
 
