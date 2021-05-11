@@ -112,12 +112,8 @@ logout = app.route('/logout')(logout)
 from app.routes.showpost import show_post
 show_post = app.route("/post/<int:post_id>")(show_post)
 
-
-@app.route("/about")
-@util.logging.log_decorator()
-def about():
-    return render_template("about.html")
-
+from app.routes.about import about
+about = app.route("/about")(about)
 
 @app.route("/contact")
 @util.logging.log_decorator()
