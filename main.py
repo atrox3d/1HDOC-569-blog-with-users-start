@@ -106,12 +106,8 @@ register = app.route('/register', methods=['GET', 'POST'])(register)
 from app.routes.login import login
 login = app.route('/login', methods=["GET", "POST"])(login)
 
-
-@app.route('/logout')
-@util.logging.log_decorator()
-def logout():
-    return redirect(url_for('get_all_posts'))
-
+from app.routes.logout import logout
+logout = app.route('/logout')(logout)
 
 @app.route("/post/<int:post_id>")
 @util.logging.log_decorator()
