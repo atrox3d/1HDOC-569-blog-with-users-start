@@ -1,4 +1,5 @@
 from flask import url_for, render_template, flash
+from flask_login import current_user
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 
@@ -63,4 +64,4 @@ def register():
             logger.info(f"redirect: {url=}")
             return redirect(url)
     logger.info("GET")
-    return render_template("register.html", form=form)
+    return render_template("register.html", form=form, loggedin=current_user.is_authenticated)
