@@ -8,8 +8,6 @@
 # import flask_sqlalchemy
 from flask import (
     Flask,
-    redirect,
-    url_for,
     # request,
 )
 from flask_bootstrap import Bootstrap
@@ -34,8 +32,7 @@ import logging
 #
 from app.models import (
     db,
-    User,
-    BlogPost
+    User
 )
 import util.network
 import util.logging
@@ -120,14 +117,8 @@ add_new_post = app.route("/new-post")(add_new_post)
 from app.routes.editpost import edit_post
 edit_post = app.route("/edit-post/<int:post_id>")(edit_post)
 
-
-@app.route("/delete/<int:post_id>")
-@util.logging.log_decorator()
-def delete_post(post_id):
-    post_to_delete = BlogPost.query.get(post_id)
-    db.session.delete(post_to_delete)
-    db.session.commit()
-    return redirect(url_for('get_all_posts'))
+from app.routes.deletepost import delete_post
+delete_post = app.route("/delete/<int:post_id>")(delete_post)
 
 
 if __name__ == "__main__":
