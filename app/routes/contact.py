@@ -5,4 +5,7 @@ import util.logging
 
 @util.logging.log_decorator()
 def contact():
-    return render_template("contact.html", loggedin=current_user.is_authenticated)
+    return render_template(
+        "contact.html",
+        # loggedin=current_user.is_authenticated
+    )

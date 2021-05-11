@@ -64,4 +64,8 @@ def register():
             logger.info(f"redirect: {url=}")
             return redirect(url)
     logger.info("GET")
-    return render_template("register.html", form=form, loggedin=current_user.is_authenticated)
+    return render_template(
+        "register.html",
+        form=form,
+        # loggedin=current_user.is_authenticated
+    )

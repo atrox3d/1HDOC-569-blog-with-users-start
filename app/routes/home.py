@@ -9,4 +9,8 @@ from app.models import BlogPost
 @util.logging.log_decorator()
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, loggedin=current_user.is_authenticated)
+    return render_template(
+        "index.html",
+        all_posts=posts,
+        # loggedin=current_user.is_authenticated
+    )

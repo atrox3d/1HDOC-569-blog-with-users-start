@@ -49,4 +49,8 @@ def login():
             url = url_for("register")
             logger.info(f"redirect: {url=}")
             return redirect(url)
-    return render_template("login.html", form=form, loggedin=current_user.is_authenticated)
+    return render_template(
+        "login.html",
+        form=form,
+        # loggedin=current_user.is_authenticated
+    )

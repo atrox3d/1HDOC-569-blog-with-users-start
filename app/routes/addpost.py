@@ -24,4 +24,8 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form, loggedin=current_user.is_authenticated)
+    return render_template(
+        "make-post.html",
+        form=form,
+        # loggedin=current_user.is_authenticated
+    )
