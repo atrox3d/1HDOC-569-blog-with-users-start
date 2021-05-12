@@ -88,43 +88,33 @@ def load_user(user_id):
 #
 ########################################################################################################################
 from app.routes.home import get_all_posts
-
 get_all_posts = app.route('/')(get_all_posts)
 
 from app.routes.register import register
-
 register = app.route('/register', methods=['GET', 'POST'])(register)
 
 from app.routes.login import login
-
 login = app.route('/login', methods=["GET", "POST"])(login)
 
 from app.routes.logout import logout
-
 logout = app.route('/logout')(logout)
 
 from app.routes.showpost import show_post
-
 show_post = app.route("/post/<int:post_id>")(show_post)
 
 from app.routes.about import about
-
 about = app.route("/about")(about)
 
 from app.routes.contact import contact
-
 contact = app.route("/contact")(contact)
 
 from app.routes.addpost import add_new_post
-
 add_new_post = app.route("/new-post")(add_new_post)
 
 from app.routes.editpost import edit_post
-
 edit_post = app.route("/edit-post/<int:post_id>")(edit_post)
 
 from app.routes.deletepost import delete_post
-
 delete_post = app.route("/delete/<int:post_id>")(delete_post)
 
 if __name__ == "__main__":
