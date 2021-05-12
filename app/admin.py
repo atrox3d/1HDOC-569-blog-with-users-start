@@ -42,7 +42,7 @@ def create_default_admin():
         id=1,
         name="admin",
         email="admin@admin.com",
-        password="password"
+        password="admin"
     )
     return admin
 
