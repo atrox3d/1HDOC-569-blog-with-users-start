@@ -27,7 +27,8 @@ import logging
 from app.admin import fix_admin
 from app.models import (
     db,
-    User
+    User,
+    fix_example_post
 )
 import util.network
 import util.logging
@@ -66,6 +67,7 @@ db.init_app(app)
 # db.drop_all()
 db.create_all()
 fix_admin()
+fix_example_post()
 ########################################################################################################################
 #
 #   security
