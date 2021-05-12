@@ -1,7 +1,4 @@
-import functools
 import logging
-
-from flask_login import current_user
 
 import util.logging
 from app.models import User, createuser, adduser, db
@@ -86,9 +83,12 @@ def fix_admin():
 
 @util.logging.log_decorator()
 def adminonly(func):
+    import functools
+    from flask_login import current_user
+    from flask import abort
+
     @functools.wraps(func)
     def adminonly_decorator(*args, **kwargs):
-        from flask import abort
         logger.info(f"{current_user.get_id()=}")
         userid = current_user.get_id()
         if userid and int(userid) == 1:
