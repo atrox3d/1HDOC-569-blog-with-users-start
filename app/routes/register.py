@@ -1,16 +1,13 @@
 from flask import url_for, render_template, flash
-from flask_login import current_user
-from werkzeug.security import generate_password_hash
 from werkzeug.utils import redirect
 
 import logging
 
 import app.forms
 import util.logging
-from app.models import User, db
+from app.models import createuser, adduser
 
 logger = logging.getLogger(__name__)
-
 
 # from main import app, logger
 @util.logging.log_decorator()
@@ -22,26 +19,6 @@ def processform(form: app.forms.RegisterForm):
     logger.info(f"{password=}")
     logger.info(f"{name=}")
     return email, password, name
-
-
-@util.logging.log_decorator()
-def createuser(email, password, name):
-    logger.info("hash password")
-    password_hash = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-    logger.info(f"create User({email=}, {password_hash=}, {name=}")
-    user = User(
-        email=email,
-        password=password_hash,
-        name=name
-    )
-    return user
-
-
-@util.logging.log_decorator()
-def adduser(user:User):
-    logger.info("add user")
-    db.session.add(user)
-    db.session.commit()
 
 
 @util.logging.log_decorator()
