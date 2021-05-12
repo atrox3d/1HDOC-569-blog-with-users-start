@@ -1,4 +1,8 @@
+import functools
 import logging
+
+from flask_login import current_user
+
 import util.logging
 from app.models import User, createuser, adduser, db
 
@@ -14,10 +18,15 @@ def load_admin():
 
 @util.logging.log_decorator()
 def find_admin():
-    admin = create_default_admin()
-    admin = db.session.query(User).filter_by(id=admin.id).first() or \
-            db.session.query(User).filter_by(name=admin.name).first() or \
-            db.session.query(User).filter_by(email=admin.email).first()
+    _admin = create_default_admin()
+    logger.info(f"filter_by {_admin.id=}")
+    admin = db.session.query(User).filter_by(id=_admin.id).first()
+    if not admin:
+        logger.info(f"filter_by {_admin.mail=}")
+        admin = db.session.query(User).filter_by(email=_admin.email).first()
+    if not admin:
+        logger.info(f"filter_by {_admin.name=}")
+        admin = db.session.query(User).filter_by(name=_admin.name).first()
     return admin
 
 
@@ -25,6 +34,7 @@ def find_admin():
 def delete_admin():
     admin = find_admin()
     if admin:
+        logger.info("admin found, deleting")
         db.session.delete(admin)
         db.session.commit()
 
@@ -43,6 +53,7 @@ def create_default_admin():
 @util.logging.log_decorator()
 def fix_admin():
 
+    # only for testing
     # delete_admin()
 
     admin = load_admin()
@@ -52,11 +63,16 @@ def fix_admin():
         admin = create_default_admin()
         try:
             adduser(admin)
+            logger.info("user default admin added")
+            logger.info("user default admin check id==1")
             admin = find_admin()
             if admin.id != 1:
+                logger.info("admin id != 1, fixing")
                 # raise SystemExit(f"{admin.id=}")
                 admin.id = 1
                 db.session.commit()
+                logger.info("user default admin updated")
+            logger.info("user default admin check id ok")
         except Exception as e:
             logger.critical(repr(e))
             exit(1)
@@ -66,3 +82,17 @@ def fix_admin():
     logger.info(f"{admin.email=}")
     logger.info(f"{admin.password=}")
     logger.info(f"{admin.name=}")
+
+
+@util.logging.log_decorator()
+def adminonly(func):
+    @functools.wraps(func)
+    def adminonly_decorator(*args, **kwargs):
+        from flask import abort
+        logger.info(f"{current_user.get_id()=}")
+        userid = current_user.get_id()
+        if userid and int(userid) == 1:
+            result = func(*args, **kwargs)
+            return result
+        return abort(403)
+    return adminonly_decorator

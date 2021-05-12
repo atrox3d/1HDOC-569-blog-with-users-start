@@ -3,11 +3,13 @@ from flask_login import current_user
 from werkzeug.utils import redirect
 
 import util.logging
+from app.admin import adminonly
 from app.forms import CreatePostForm
 from app.models import BlogPost, db
 
 
 @util.logging.log_decorator()
+@adminonly
 def edit_post(post_id):
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
