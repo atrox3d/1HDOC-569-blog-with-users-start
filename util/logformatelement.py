@@ -1,0 +1,30 @@
+class LogFormatElement:
+    def __init__(self, name, width=None):
+        self.name = name
+        self._width = width
+
+    @property
+    def width(self):
+        # print(f"return {self._width=}")
+        return self._width
+
+    @width.setter
+    def width(self, width):
+        # print(f"set self._width={width=}")
+        self._width = width
+
+    def __str__(self):
+        return f"%({self.name}){self._width or ''}s"
+
+
+if __name__ == '__main__':
+    lfe = LogFormatElement("test")
+    print(lfe)
+
+    lfe.width = 5
+    print(lfe.width)
+    print(lfe)
+
+    lfe.width = -18
+    print(lfe.width)
+    print(lfe)
