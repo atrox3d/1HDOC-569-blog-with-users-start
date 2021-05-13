@@ -11,6 +11,7 @@ class LogFormat:
             separator="|",
             formatstring=FORMAT_STRING
     ):
+        self._formatstring = ""
         self.separator = separator
         self.elements = dict()
         self.formatstring = formatstring
@@ -31,6 +32,8 @@ class LogFormat:
 
         self.elements.clear()
         self.elements.update(elements)
+
+    def update(self):
         self._formatstring = f" {self.separator} ".join(map(str, self.elements.values()))
 
     def __str__(self):
@@ -39,9 +42,18 @@ class LogFormat:
     def __repr__(self):
         return self._formatstring
 
+    def set(self, name, width):
+        element: LogFormatElement = self.elements.get(name)
+        if not element:
+            raise IndexError(f"element {name} not found")
+        element.width = width
+        self.update()
+
 
 if __name__ == '__main__':
     lf = LogFormat()
     print(lf)
     lf.formatstring = "%(a)-10s|%(b)2s"
+    print(lf)
+    lf.set('a', 20)
     print(lf)
