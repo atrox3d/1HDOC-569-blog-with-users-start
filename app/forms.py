@@ -15,22 +15,21 @@ class CreatePostForm(FlaskForm):
 
 ##WTForm
 class Loginform(FlaskForm):
-    email = StringField(
-        "Email",
-        validators=[
-            DataRequired(),
-            # Email()
-        ]
-    )
-    password = PasswordField(
-        "Password",
-        validators=[DataRequired()]
-    )
+    email = StringField("Email", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+
+
+Loginform.submit = SubmitField("Submit")
 
 
 class RegisterForm(Loginform):
     name = StringField("Name", validators=[DataRequired()])
 
 
-Loginform.submit = SubmitField("Submit")
 RegisterForm.submit = SubmitField("Submit")
+
+
+class CommentForm(FlaskForm):
+    comment = CKEditorField("comment", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
