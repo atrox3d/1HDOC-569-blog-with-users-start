@@ -33,7 +33,7 @@
             <a href="#">{{post.author.name}}</a>
             on {{post.date}}
 
-            {% if current_user.get_id() == 1: %}
+            {% if current_user.get_id() == '1': %}
                 <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a>
             {% endif %}
 
@@ -41,8 +41,7 @@
         </div>
         <hr>
         {% endfor %}
-
-        {% if current_user.get_id() == 1: %}
+        {% if current_user.get_id() == '1': %}
             <!-- New Post -->
             <div class="clearfix">
               <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
