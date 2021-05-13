@@ -1,7 +1,19 @@
+from ctypes import FormatError
+
+
 class LogFormatElement:
     def __init__(self, name, width=None):
         self.name = name
         self._width = width
+
+    @classmethod
+    def fromstring(cls, string: str):
+        import re
+        result = re.search(r"%\((.+)\)(-*[0-9]*)s", string)
+        if not result:
+            raise ValueError("invalid format, must be: %(name)[width]s")
+        name, width = result.groups()
+        return cls(name, width)
 
     @property
     def width(self):
@@ -28,3 +40,8 @@ if __name__ == '__main__':
     lfe.width = -18
     print(lfe.width)
     print(lfe)
+
+    s = LogFormatElement.fromstring("%(ciao)-20s")
+    print(s)
+    print(s.name)
+    print(s.width)
