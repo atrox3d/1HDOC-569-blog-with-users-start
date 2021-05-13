@@ -12,7 +12,7 @@ class LogFormat:
             formatstring=FORMAT_STRING
     ):
         self.separator = separator
-        self.elements = []
+        self.elements = dict()
         self.formatstring = formatstring
         # self.parsestring(self._formatstring)
 
@@ -22,14 +22,16 @@ class LogFormat:
 
     @formatstring.setter
     def formatstring(self, formatstring):
-        print("@formatstring.setter")
         strings = formatstring.split(self.separator)
-        elements = []
+        elements = {}
+
         for string in strings:
             element = LogFormatElement.fromstring(string)
-            elements.append(element)
-        self.elements = elements
-        self._formatstring = f" {self.separator} ".join(map(str, self.elements))
+            elements[element.name] = element
+
+        self.elements.clear()
+        self.elements.update(elements)
+        self._formatstring = f" {self.separator} ".join(map(str, self.elements.values()))
 
     def __str__(self):
         return self._formatstring
