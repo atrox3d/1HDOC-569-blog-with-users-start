@@ -1,19 +1,19 @@
 import logging
 
-import util.logutils
+from util.logutils import loghelpers
 from app.models import User, createuser, adduser, db
 
 logger = logging.getLogger(__name__)
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def load_admin():
     logger.info("loading admin user(id==1)")
     admin = User.query.get(1)
     return admin
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def find_admin():
     _admin = create_default_admin()
     logger.info(f"filter_by {_admin.id=}")
@@ -27,7 +27,7 @@ def find_admin():
     return admin
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def delete_admin():
     admin = find_admin()
     if admin:
@@ -36,7 +36,7 @@ def delete_admin():
         db.session.commit()
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def create_default_admin():
     admin = createuser(
         id=1,
@@ -47,7 +47,7 @@ def create_default_admin():
     return admin
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def fix_admin():
 
     # only for testing
@@ -81,7 +81,7 @@ def fix_admin():
     logger.info(f"{admin.name=}")
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def adminonly(func):
     import functools
     from flask_login import current_user

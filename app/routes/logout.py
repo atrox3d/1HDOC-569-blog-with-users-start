@@ -2,10 +2,10 @@ from flask import url_for
 from flask_login import current_user, logout_user
 from werkzeug.utils import redirect
 
-import util.logutils
+from util.logutils import loghelpers
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def logout():
     logout_user()
     return redirect(

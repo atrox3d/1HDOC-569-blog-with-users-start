@@ -2,12 +2,12 @@ from flask import url_for
 from flask_login import current_user
 from werkzeug.utils import redirect
 
-import util.logutils
+from util.logutils import loghelpers
 from app.admin import adminonly
 from app.models import BlogPost, db
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 @adminonly
 def delete_post(post_id):
     post_to_delete = BlogPost.query.get(post_id)

@@ -1,9 +1,9 @@
 from flask import render_template
 from flask_login import current_user
-import util.logutils
+from util.logutils import loghelpers
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def contact():
     return render_template(
         "contact.html",

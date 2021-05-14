@@ -4,13 +4,13 @@ from werkzeug.utils import redirect
 import logging
 
 import app.forms
-import util.logutils
+from util.logutils import loghelpers
 from app.models import createuser, adduser
 
 logger = logging.getLogger(__name__)
 
 # from main import app, logger
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def processform(form: app.forms.RegisterForm):
     email = form.email.data
     password = form.password.data
@@ -21,7 +21,7 @@ def processform(form: app.forms.RegisterForm):
     return email, password, name
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def register():
     from app.forms import RegisterForm
     form = RegisterForm()

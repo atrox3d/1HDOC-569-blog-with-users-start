@@ -1,12 +1,12 @@
 from flask import render_template
 from flask_login import current_user
 
-import util.logutils
+from util.logutils import loghelpers
 import logging
 
 logger = logging.getLogger(__name__)
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def about():
     # logger.debug(f"{current_user=}")
     # logger.debug(f"{current_user.__dict__=}")

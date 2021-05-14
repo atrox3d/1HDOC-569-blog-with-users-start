@@ -1,12 +1,12 @@
 from flask import render_template
 from flask_login import current_user
 
-import util.logutils
+from util.logutils import loghelpers
 from app.models import BlogPost
 # from main import app
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def get_all_posts():
     posts = BlogPost.query.all()
     return render_template(

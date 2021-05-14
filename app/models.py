@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash
 
-import util.logutils
+from util.logutils import loghelpers
 import logging
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ class BlogPost(db.Model):
     author = relationship("User", back_populates="posts")
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def createuser(email, password, name, id=None):
     logger.info(f"create User(")
     logger.info(f"\t{id=}, ")
@@ -60,7 +60,7 @@ def createuser(email, password, name, id=None):
     return user
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def adduser(user: User):
     logger.info("hash password")
     password_hash = generate_password_hash(user.password, method="pbkdf2:sha256", salt_length=8)
@@ -75,7 +75,7 @@ def adduser(user: User):
     db.session.commit()
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def addpost(post: BlogPost):
     logger.info(f"save BlogPost(")
     logger.info(f"\t{post.id=}, ")
@@ -90,7 +90,7 @@ def addpost(post: BlogPost):
     db.session.commit()
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def create_example_post():
     example = BlogPost(
         id=2,
@@ -108,7 +108,7 @@ def create_example_post():
     return example
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def find_example_post():
     example = create_example_post()
     logger.info(f"filter_by {example.id=}")
@@ -117,7 +117,7 @@ def find_example_post():
     return post
 
 
-@util.logutils.log_decorator()
+@loghelpers.log_decorator()
 def fix_example_post():
     post = find_example_post()
     if not post:

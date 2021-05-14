@@ -31,11 +31,11 @@ from app.models import (
     fix_example_post
 )
 import util.network
-import util.logutils
-from util.logger import RootLogger
+from util.logutils import loghelpers
+from util.logutils.rootlogger import RootLogger
 
 ########################################################################################################################
-rootlogger = util.logutils.get_root_logger()
+rootlogger = loghelpers.get_root_logger()
 rootlogger = RootLogger(separator=" | ")
 rootlogger.setwidth('funcName', 20)
 rootlogger.setwidth(3, 20)
