@@ -47,14 +47,13 @@ class LogFormat:
     def __repr__(self):
         return self._formatstring
 
-    def setwidth(self, name, width):
-        if isinstance(name, int):
+    def setwidth(self, nameorindex, width):
+        if isinstance(nameorindex, int):
             keys = list(self.elements.keys())
-            print(keys)
-            name = keys[name]
-        element: LogFormatElement = self.elements.get(name)
+            nameorindex = keys[nameorindex]
+        element: LogFormatElement = self.elements.get(nameorindex)
         if not element:
-            raise IndexError(f"element {name} not found")
+            raise IndexError(f"element {nameorindex} not found")
         element.width = width
         self.update()
 

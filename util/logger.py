@@ -18,8 +18,8 @@ class RootLogger:
     def _set_fmt(self, _fmt):
         self.logger.handlers[0].setFormatter(logging.Formatter(_fmt))
 
-    def setwidth(self, specifier, width):
-        self.format.setwidth(specifier, width)
+    def setwidth(self, nameorindex, width):
+        self.format.setwidth(nameorindex, width)
         self._set_fmt(str(self.format))
 
     def __getattr__(self, item):
