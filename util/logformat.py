@@ -48,6 +48,10 @@ class LogFormat:
         return self._formatstring
 
     def setwidth(self, name, width):
+        if isinstance(name, int):
+            keys = list(self.elements.keys())
+            print(keys)
+            name = keys[name]
         element: LogFormatElement = self.elements.get(name)
         if not element:
             raise IndexError(f"element {name} not found")

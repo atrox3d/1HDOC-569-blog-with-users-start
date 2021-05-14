@@ -38,6 +38,7 @@ from util.logger import RootLogger
 rootlogger = util.logutils.get_root_logger()
 rootlogger = RootLogger(separator=" | ")
 rootlogger.setwidth('funcName', 20)
+rootlogger.setwidth(3, 20)
 logger = logging.getLogger(__name__)
 
 #
