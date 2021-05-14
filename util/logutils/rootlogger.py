@@ -1,10 +1,10 @@
 import logging
 import sys
+
 try:
     from logformat import LogFormat
 except ImportError:
     from .logformat import LogFormat
-
 
 
 class RootLogger:
@@ -51,4 +51,3 @@ if __name__ == '__main__':
     print("check!")
     logger.info(logger.format)
     logger.info(logger._get_fmt())
-
