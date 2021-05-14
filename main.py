@@ -39,6 +39,7 @@ rootlogger = loghelpers.get_root_logger()
 rootlogger = RootLogger(separator=" | ")
 rootlogger.setwidth('funcName', 20)
 rootlogger.setwidth(3, 20)
+rootlogger.setwidth(2, 25)
 logger = logging.getLogger(__name__)
 
 #
