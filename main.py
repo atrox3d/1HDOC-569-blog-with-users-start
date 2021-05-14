@@ -108,7 +108,7 @@ from app.routes.logout import logout
 logout = app.route('/logout')(logout)
 
 from app.routes.showpost import show_post
-show_post = app.route("/post/<int:post_id>")(show_post)
+show_post = app.route("/post/<int:post_id>", methods=["GET", "POST"])(show_post)
 
 from app.routes.about import about
 about = app.route("/about")(about)
