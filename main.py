@@ -32,9 +32,12 @@ from app.models import (
 )
 import util.network
 import util.logutils
+from util.logger import RootLogger
 
 ########################################################################################################################
 rootlogger = util.logutils.get_root_logger()
+rootlogger = RootLogger(separator=" | ")
+rootlogger.setwidth('funcName', 20)
 logger = logging.getLogger(__name__)
 
 #

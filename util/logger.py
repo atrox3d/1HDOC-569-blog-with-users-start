@@ -1,6 +1,10 @@
 import logging
 import sys
-from logformat import LogFormat
+try:
+    from logformat import LogFormat
+except ImportError:
+    from .logformat import LogFormat
+
 
 
 class RootLogger:

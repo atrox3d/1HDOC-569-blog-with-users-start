@@ -1,5 +1,9 @@
 # from util.logging import FORMAT_STRING
-from logformatelement import LogFormatElement
+try:
+    from logformatelement import LogFormatElement
+except ImportError:
+    from .logformatelement import LogFormatElement
+
 
 FORMAT_STRING = '%(asctime)s | %(levelname)-8s | %(name)20s | %(funcName)15s() | %(message)s'
 
