@@ -1,6 +1,3 @@
-from ctypes import FormatError
-
-
 class LogFormatElement:
     def __init__(self, name, width=None):
         self.name = name

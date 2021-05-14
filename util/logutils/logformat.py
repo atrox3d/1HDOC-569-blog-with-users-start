@@ -1,4 +1,3 @@
-# from util.logging import FORMAT_STRING
 try:
     from logformatelement import LogFormatElement
 except ImportError:

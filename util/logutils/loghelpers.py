@@ -1,7 +1,10 @@
 import sys
 import logging
 import functools
-import util.logutils.params
+try:
+    import params
+except ImportError:
+    from . import params
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +179,7 @@ def log_decorator(multiple_lines=False):
     def make_decorator(fn):
         @functools.wraps(fn)
         def wrapper(*args, **kwargs):
-            logger.info(f"calling {fn.__name__}({util.logutils.params.params2str(*args, **kwargs)})")
+            logger.info(f"calling {fn.__name__}({params.params2str(*args, **kwargs)})")
             retval = fn(*args, **kwargs)
             # logger.info(f"return value:")
             for line in log_formatdata("return value", retval):
