@@ -25,7 +25,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(1000))
     # plainpassword = db.Column(db.String(100))
     posts = relationship("BlogPost", back_populates="author")
-    comments = relationship("Comment", back_populates="author")
+    comments = relationship("Comment", back_populates="comment_author")
 
 
 class BlogPost(db.Model):
@@ -41,6 +41,8 @@ class BlogPost(db.Model):
     #
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="posts")
+    #
+    comments = relationship("Comment", back_populates="parent_post")
 
 
 class Comment(db.Model):
@@ -50,7 +52,10 @@ class Comment(db.Model):
     text = db.Column(db.Text, nullable=False)
     #
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    author = relationship("User", back_populates="comments")
+    comment_author = relationship("User", back_populates="comments")
+    #
+    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
+    parent_post = relationship("BlogPost", back_populates="comments")
 
 
 @loghelpers.log_decorator()
