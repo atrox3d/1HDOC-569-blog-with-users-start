@@ -6,7 +6,7 @@ from werkzeug.utils import redirect
 import logging
 
 import app.forms
-import util.logging
+import util.logutils
 from app.models import User
 
 # from main import app, logger
@@ -14,7 +14,7 @@ from app.models import User
 logger = logging.getLogger(__name__)
 
 
-@util.logging.log_decorator()
+@util.logutils.log_decorator()
 def processform(form: app.forms.Loginform):
     email = form.email.data
     password = form.password.data
@@ -23,7 +23,7 @@ def processform(form: app.forms.Loginform):
     return email, password
 
 
-@util.logging.log_decorator()
+@util.logutils.log_decorator()
 def login():
     from app.forms import Loginform
     form = Loginform()

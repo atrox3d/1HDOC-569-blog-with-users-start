@@ -31,11 +31,12 @@ from app.models import (
     fix_example_post
 )
 import util.network
-import util.logging
+import util.logutils
 
 ########################################################################################################################
-util.logging.get_root_logger()
+rootlogger = util.logutils.get_root_logger()
 logger = logging.getLogger(__name__)
+
 #
 #   app
 #
