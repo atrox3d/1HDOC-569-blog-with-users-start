@@ -70,7 +70,7 @@ app.app_context().push()
 db.init_app(app)
 ########################################################################################################################
 # CREATE TABLE IN DB
-# db.drop_all()
+db.drop_all()
 db.create_all()
 fix_admin()
 fix_example_post()
