@@ -12,5 +12,6 @@ def html_tag(tagname):
     return decorator
 
 
-h1 = html_tag("h1")
-em = html_tag("em")
+if __name__ == '__main__':
+    h1 = html_tag("h1")
+    em = html_tag("em")
